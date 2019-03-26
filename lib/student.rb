@@ -11,14 +11,14 @@ class Student
   def self.create_table
     sql = <<-SQL
     CREATE TABLE IF NOT EXISTS students (
-        id INTEGER PRIMARY KEY, 
-        name TEXT, 
+        id INTEGER PRIMARY KEY,
+        name TEXT,
         grade TEXT
         )
-    
+
     SQL
-    DB[:conn].execute(sql) 
-  end 
+    DB[:conn].execute(sql)
+  end
 
    def self.drop_table
     sql = <<-SQL
@@ -29,7 +29,7 @@ class Student
   end
 
    def save
-    if self.id 
+    if self.id
       self.update
     else
       sql = <<-SQL
@@ -43,19 +43,19 @@ class Student
     end
   end
 
-   def self.create(name, grade) 
+   def self.create(name, grade)
     student = Student.new(name, grade)
     student.save
     student
   end
 
-   def self.new_from_db(row) 
+   def self.new_from_db(row)
     id = row[0]
     name =  row[1]
     grade = row[2]
-    new_student = self.new(name, grade, id) 
-    new_student 
-  end 
+    new_student = self.new(name, grade, id)
+    new_student
+  end
 
    def self.find_by_name(name)
     sql = <<-SQL
@@ -68,13 +68,13 @@ class Student
      DB[:conn].execute(sql, name).map do |row|
       self.new_from_db(row)
     end.first
-  end 
+  end
 
-   def update 
+   def update
     sql = "UPDATE students SET name = ?, grade = ? WHERE id = ?"
     DB[:conn].execute(sql, self.name, self.grade, self.id)
 
-   end 
-end 
+   end
+end
 
 end
